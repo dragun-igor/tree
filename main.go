@@ -22,15 +22,15 @@ func read(dir string, firstSymbol string, level int) error {
 		}
 		var symbol string
 		var nextSymbol string
-		if level > 0 {
-			if i != len(res)-1 {
-				symbol = " ╠═"
-				nextSymbol = " ║"
-			} else {
-				symbol = " ╚═"
-				nextSymbol = "  "
-			}
+		// if level > 0 {
+		if i != len(res)-1 {
+			symbol = " ╠═══"
+			nextSymbol = " ║  "
+		} else {
+			symbol = " ╚═══"
+			nextSymbol = "    "
 		}
+		// }
 
 		if unit.IsDir() {
 			fmt.Printf("%s\033[1;35m%s\033[0m", firstSymbol+symbol, unit.Name()+"\n")
@@ -46,5 +46,7 @@ func main() {
 	flag.StringVar(&path, "path", ".", "path for tree")
 	flag.IntVar(&l, "level", -1, "deep of tree")
 	flag.Parse()
+	p, _ := os.Getwd()
+	fmt.Printf("\033[1;35m%s\033[0m", p+"/"+path+"\n")
 	read(path, "", 0)
 }
