@@ -5,9 +5,14 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 )
 
-var l int
+var (
+	l   int
+	ext string
+	reg *regexp.Regexp
+)
 
 func tree(dir string, firstSymbol string, level int) error {
 	if level > l && l != -1 {
@@ -33,7 +38,9 @@ func tree(dir string, firstSymbol string, level int) error {
 				return err
 			}
 		} else {
-			fmt.Printf("%s\033[1;34m%s\033[0m\n", firstSymbol+symbol, unit.Name())
+			if match := reg.MatchString(unit.Name()); match {
+				fmt.Printf("%s\033[1;34m%s\033[0m\n", firstSymbol+symbol, unit.Name())
+			}
 		}
 	}
 	return nil
@@ -41,10 +48,19 @@ func tree(dir string, firstSymbol string, level int) error {
 
 func main() {
 	var path string
-	flag.StringVar(&path, "path", ".", "path for tree")
-	flag.IntVar(&l, "level", -1, "deep level of tree")
+	var err error
+	flag.StringVar(&path, "p", ".", "path for tree")
+	flag.IntVar(&l, "l", -1, "deep level of tree")
+	flag.StringVar(&ext, "e", "", "extension of files")
 	flag.Parse()
-	err := tree(path, "", 0)
+	if ext != "" {
+		ext = "." + ext
+	}
+	reg, err = regexp.Compile(fmt.Sprintf("\\w%s$", ext))
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tree(path, "", 0)
 	if err != nil {
 		log.Fatal(err)
 	}
