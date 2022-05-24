@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	v   bool
 	l   int
 	ext string
 	reg *regexp.Regexp
@@ -23,6 +24,9 @@ func tree(dir string, firstSymbol string, level int) error {
 		return err
 	}
 	for i, unit := range res {
+		if !v && unit.Name()[0:1] == "." {
+			continue
+		}
 		var symbol string
 		var nextSymbol string
 		if i != len(res)-1 {
@@ -52,6 +56,7 @@ func main() {
 	flag.StringVar(&path, "p", ".", "path for tree")
 	flag.IntVar(&l, "l", -1, "deep level of tree")
 	flag.StringVar(&ext, "e", "", "extension of files")
+	flag.BoolVar(&v, "v", false, "show hidden elements")
 	flag.Parse()
 	if ext != "" {
 		ext = "." + ext
