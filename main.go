@@ -10,14 +10,14 @@ import (
 var l int
 
 func tree(dir string, firstSymbol string, level int) error {
+	if level > l && l != -1 {
+		return nil
+	}
 	res, err := os.ReadDir(dir)
 	if err != nil {
 		return err
 	}
 	for i, unit := range res {
-		if level > l && l != -1 {
-			return nil
-		}
 		var symbol string
 		var nextSymbol string
 		if i != len(res)-1 {
