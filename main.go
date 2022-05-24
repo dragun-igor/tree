@@ -29,7 +29,9 @@ func tree(dir string, firstSymbol string, level int) error {
 		}
 		if unit.IsDir() {
 			fmt.Printf("%s\033[1;35m%s\033[0m\n", firstSymbol+symbol, unit.Name())
-			tree(dir+"/"+unit.Name(), firstSymbol+nextSymbol, level+1)
+			if err := tree(dir+"/"+unit.Name(), firstSymbol+nextSymbol, level+1); err != nil {
+				return err
+			}
 		} else {
 			fmt.Printf("%s\033[1;34m%s\033[0m\n", firstSymbol+symbol, unit.Name())
 		}
