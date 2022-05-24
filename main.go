@@ -28,10 +28,10 @@ func tree(dir string, firstSymbol string, level int) error {
 			nextSymbol = "    "
 		}
 		if unit.IsDir() {
-			fmt.Printf("%s\033[1;35m%s\033[0m", firstSymbol+symbol, unit.Name()+"\n")
+			fmt.Printf("%s\033[1;35m%s\033[0m\n", firstSymbol+symbol, unit.Name())
 			tree(dir+"/"+unit.Name(), firstSymbol+nextSymbol, level+1)
 		} else {
-			fmt.Printf("%s\033[1;34m%s\033[0m", firstSymbol+symbol, unit.Name()+"\n")
+			fmt.Printf("%s\033[1;34m%s\033[0m\n", firstSymbol+symbol, unit.Name())
 		}
 	}
 	return nil
@@ -40,7 +40,7 @@ func tree(dir string, firstSymbol string, level int) error {
 func main() {
 	var path string
 	flag.StringVar(&path, "path", ".", "path for tree")
-	flag.IntVar(&l, "level", -1, "deep of tree")
+	flag.IntVar(&l, "level", -1, "deep level of tree")
 	flag.Parse()
 	err := tree(path, "", 0)
 	if err != nil {
